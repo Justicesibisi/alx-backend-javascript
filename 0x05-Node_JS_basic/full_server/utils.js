@@ -1,31 +1,41 @@
 import fs from 'fs';
 
-// Function to read the database asynchronously
-const readDatabase = (filePath) => new Promise((resolve, reject) => {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      reject(err);
-    } else {
-      // Process the data to extract first names per field
-      const lines = data.trim().split('\n').filter((line) => line.trim() !== '');
-      const studentsByField = {};
-
-      /* eslint-disable no-plusplus */
-      for (let i = 1; i < lines.length; i++) {
-        const fields = lines[i].split(',');
-        const firstName = fields[0].trim();
-        const field = fields[3].trim();
-
-        if (!studentsByField[field]) {
-          studentsByField[field] = [];
-        }
-
-        studentsByField[field].push(firstName);
+const readDatabase = (dataPath) => new Promise((resolve, reject) => {
+  if (!dataPath) {
+    reject(new Error('Cannot load the database'));
+  }
+  if (dataPath) {
+    fs.readFile(dataPath, (err, data) => {
+      if (err) {
+        reject(new Error('Cannot load the database'));
       }
+      if (data) {
+        const fileLines = data
+          .toString('utf-8')
+          .trim()
+          .split('\n');
+        const studentGroups = {};
+        const dbFieldNames = fileLines[0].split(',');
+        const studentPropNames = dbFieldNames
+          .slice(0, dbFieldNames.length - 1);
 
-      resolve(studentsByField);
-    }
-  });
+        for (const line of fileLines.slice(1)) {
+          const studentRecord = line.split(',');
+          const studentPropValues = studentRecord
+            .slice(0, studentRecord.length - 1);
+          const field = studentRecord[studentRecord.length - 1];
+          if (!Object.keys(studentGroups).includes(field)) {
+            studentGroups[field] = [];
+          }
+          const studentEntries = studentPropNames
+            .map((propName, idx) => [propName, studentPropValues[idx]]);
+          studentGroups[field].push(Object.fromEntries(studentEntries));
+        }
+        resolve(studentGroups);
+      }
+    });
+  }
 });
 
 export default readDatabase;
+module.exports = readDatabase;
