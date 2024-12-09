@@ -1,22 +1,22 @@
-function calculateNumber(type, a, b) {
-    const roundedA = Math.round(a);
-    const roundedB = Math.round(b);
-  
-    if (type === 'SUM') {
-      return Math.round(roundedA + roundedB);  // Round the result of sum
+// Basic test with Mocha and Node assertion library
+
+const calculateNumber = (type, a, b) => {
+  const aRound = Math.round(a);
+  const bRound = Math.round(b);
+
+  if (type === 'SUBTRACT') {
+    return aRound - bRound;
+  }
+
+  if (type === 'DIVIDE') {
+    if (bRound === 0) {
+      return 'Error';
     }
-    if (type === 'SUBTRACT') {
-      return Math.round(roundedA - roundedB);  // Round the result of subtraction
-    }
-    if (type === 'DIVIDE') {
-      if (roundedB === 0) {
-        return 'Error';
-      }
-      return Math.round(roundedA / roundedB);  // Round the result of division
-    }
-    
-    throw new Error('Invalid type');
-}
+    return aRound / bRound;
+  }
+
+  return aRound + bRound;
+};
 
 module.exports = calculateNumber;
-  
+
