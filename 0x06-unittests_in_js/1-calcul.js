@@ -3,20 +3,20 @@ function calculateNumber(type, a, b) {
     const roundedB = Math.round(b);
   
     if (type === 'SUM') {
-      return roundedA + roundedB;
+      return Math.round(roundedA + roundedB);  // Round the result of sum
     }
     if (type === 'SUBTRACT') {
-      return roundedA - roundedB;
+      return Math.round(roundedA - roundedB);  // Round the result of subtraction
     }
     if (type === 'DIVIDE') {
       if (roundedB === 0) {
         return 'Error';
       }
-      return roundedA / roundedB;
+      return Math.round(roundedA / roundedB);  // Round the result of division
     }
     
     throw new Error('Invalid type');
-  }
-  
-  module.exports = calculateNumber;
+}
+
+module.exports = calculateNumber;
   
