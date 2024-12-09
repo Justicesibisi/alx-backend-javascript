@@ -1,15 +1,11 @@
-// 6-payment_token.js
+// Basic test using Chai and Sinon Libraries: hooks
 
-function getPaymentTokenFromAPI(success) {
-    return new Promise((resolve, reject) => {
-      if (success) {
-        resolve({ data: 'Successful response from the API' });
-      } else {
-        // Simulate a failure by doing nothing
-        // The promise won't be rejected or resolved
-      }
-    });
-  }
-  
-  module.exports = getPaymentTokenFromAPI;
-  
+const Utils = require('./utils');
+
+const sendPaymentRequestToApi = (totalAmount, totalShipping) => {
+  const result = Utils.calculateNumber('SUM', totalAmount, totalShipping);
+  console.log(`The total is: ${result}`);
+};
+
+module.exports = sendPaymentRequestToApi;
+
